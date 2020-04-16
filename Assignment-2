@@ -1,0 +1,43 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Q1 #
+Write python/bash script that create 100 containers(25 of alpine, 25 of fedora , 25 of centos , 25 of Java) that runs even after rebooting.
+SOL:
+Bash Script-
+
+flag=1
+while [ $flag -le 100 ]
+do
+  if [ $flag -lt 26 ]
+  then
+      docker container run -d --restart unless-stopped --name adhocnw$flag alpine 
+  elif [ $flag -ge 26 -a $flag -le 50 ]
+  then
+      docker container run -d --restart unless-stopped --name adhocnw$flag fedora 
+  elif [ $flag -ge 51 -a $flag -le 75 ]
+  then
+      docker container run -d --restart unless-stopped --name adhocnw$flag centos
+  else
+      docker container run -d --restart unless-stopped --name adhocnw$flag java 
+  fi
+  flag=`expr $flag + 1`
+done
+-------------------------------------------------------------------------------------------------------------------------------------------
+Q2 #
+Write a combination of Docker and OS commands to get list of name , creation time of all containers and store them in a file.
+SOL:
+
+COMMAND:
+docker ps -a | awk '{print $13,$4,$5,$6}' > f1.txt
+** The value of $n depends on number of fields**
+------------------------------------------------------------------------------------------------------------------------------------------
+Q3 #
+Creating a container from custom docker image with parent process as firefox.
+** Docker is not installed locally in my system **
+-------------------------------------------------------------------------------------------------------------------------------------------
+Q4 #
+Get the RAM and CPU consumption of created 100 containers(Q1) and store them in a file.
+SOL:
+
+docker stats -a  --no-stream --format "table {{.Container}}\t{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}" > RAM.txt
+cat RAM.txt
+------------------------------------------------------------------------------------------------------------------------------------------
